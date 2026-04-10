@@ -384,6 +384,7 @@ select {
   <div class="saved-banner" id="saved-banner">
     <div class="saved-dot"></div>
     <span id="saved-text">Чернетка автоматично збережена</span>
+    <button id="btn-clear" onclick="clearDraft()" style="margin-left:auto;padding:4px 12px;font-size:12px;font-family:var(--sans);background:transparent;border:1px solid rgba(0,0,0,.18);border-radius:5px;color:#888;cursor:pointer;white-space:nowrap;">Очистити чернетку</button>
   </div>
 
   <!-- 1. METRIC -->
@@ -720,6 +721,28 @@ function loadSaved() {
     document.getElementById('saved-text').textContent = 'Завантажено збережену чернетку';
     updateProgress();
   } catch(e) {}
+}
+
+function clearDraft() {
+  if (!confirm('Очистити чернетку? Всі введені дані будуть видалені.')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  ['metric','metric-cur','metric-tgt',
+   'a1-desc','a1-start','a1-check','a1-owner','a1-result',
+   'a2-desc','a2-start','a2-check','a2-owner','a2-result',
+   'a3-desc','a3-start','a3-check','a3-owner','a3-result',
+   'review-day','review-time','conclusion','c-name','c-contact'
+  ].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.querySelectorAll('.kpi-item').forEach(el => {
+    el.classList.remove('active');
+    const inp = el.querySelector('.kpi-target-input');
+    if (inp) inp.value = '';
+  });
+  document.getElementById('saved-banner').classList.remove('show');
+  const msgEl = document.getElementById('status-msg');
+  msgEl.className = 'status-msg'; msgEl.style.display = 'none';
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = false; btn.textContent = 'Надіслати план';
+  updateProgress();
 }
 
 function updateProgress() {
