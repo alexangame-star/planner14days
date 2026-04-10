@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Планер на 14 днів — Салон в цифрах</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #faf9f7;
+  --bg2:      #f3f0eb;
+  --bg3:      #eceae4;
+  --white:    #ffffff;
+  --text:     #1a1816;
+  --muted:    #6b6560;
+  --hint:     #a09890;
+  --border:   rgba(26,24,22,.1);
+  --border2:  rgba(26,24,22,.18);
+  --purple:   #534AB7;
+  --purple-lt:#EEEDFE;
+  --purple-dk:#3C3489;
+  --teal:     #1D9E75;
+  --teal-lt:  #E1F5EE;
+  --teal-dk:  #085041;
+  --amber:    #BA7517;
+  --amber-lt: #FAEEDA;
+  --amber-dk: #633806;
+  --gold:     #c8a96e;
+  --serif:    'Cormorant Garamond', Georgia, serif;
+  --sans:     'DM Sans', sans-serif;
+  --radius:   10px;
+  --radius-sm:6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.topbar-brand {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text);
+}
+.topbar-brand span { color: var(--gold); }
+.topbar-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.prog-bar {
+  width: 120px;
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: var(--purple);
+  border-radius: 2px;
+  transition: width .3s;
+  width: 0%;
+}
+.save-indicator {
+  font-size: 12px;
+  color: var(--teal);
+  opacity: 0;
+  transition: opacity .4s;
+}
+.save-indicator.show { opacity: 1; }
+
+/* ── LAYOUT ── */
+.page { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  padding: 48px 20px 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.hero-label {
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.hero-title em { font-style: italic; color: var(--purple); }
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 500px;
+  margin: 0 auto;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 28px; }
+.section-label {
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.card-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+/* ── ACTION CARD ── */
+.action-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.action-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.action-badge {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 500;
+  flex-shrink: 0;
+}
+.badge-purple { background: var(--purple-lt); color: var(--purple-dk); }
+.badge-teal   { background: var(--teal-lt);   color: var(--teal-dk); }
+.badge-amber  { background: var(--amber-lt);  color: var(--amber-dk); }
+.action-header-text { flex: 1; }
+.action-type { font-size: 14px; font-weight: 500; color: var(--text); }
+.action-hint { font-size: 12px; color: var(--hint); }
+.action-body { padding: 18px 20px; }
+
+/* ── FORM ELEMENTS ── */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 5px;
+  display: block;
+}
+input[type=text],
+input[type=date],
+input[type=email],
+textarea,
+select {
+  width: 100%;
+  padding: 10px 13px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+  transition: border-color .15s, background .15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+textarea { min-height: 72px; resize: vertical; }
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--purple);
+  background: var(--white);
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+.kpi-item {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  user-select: none;
+}
+.kpi-item.active {
+  background: var(--teal-lt);
+  border-color: var(--teal);
+}
+.kpi-check {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: var(--white);
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 6px;
+  transition: all .15s;
+}
+.kpi-item.active .kpi-check {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.kpi-check svg { display: none; }
+.kpi-item.active .kpi-check svg { display: block; }
+.kpi-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.kpi-target-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--white);
+  font-family: var(--sans);
+  color: var(--text);
+  margin-top: 6px;
+}
+.kpi-target-input:focus { outline: none; border-color: var(--teal); }
+
+/* ── SUBMIT AREA ── */
+.submit-area {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+}
+.submit-title { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.submit-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+
+.btn-main {
+  display: block; width: 100%;
+  padding: 13px 20px;
+  font-size: 15px; font-weight: 500;
+  background: var(--purple); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; font-family: var(--sans);
+  transition: opacity .2s;
+}
+.btn-main:hover { opacity: .88; }
+.btn-main:disabled { opacity: .45; cursor: not-allowed; }
+.btn-secondary {
+  display: block; width: 100%;
+  padding: 11px 20px;
+  font-size: 14px; font-weight: 500;
+  background: transparent; color: var(--purple);
+  border: 1px solid var(--purple);
+  border-radius: var(--radius-sm);
+  cursor: pointer; font-family: var(--sans);
+  transition: background .2s;
+  margin-top: 8px;
+}
+.btn-secondary:hover { background: var(--purple-lt); }
+
+.status-msg {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  display: none;
+  line-height: 1.5;
+}
+.status-ok  { background: var(--teal-lt);  color: var(--teal-dk);  display: block; }
+.status-err { background: #FCEBEB;         color: #791F1F;         display: block; }
+
+/* ── SAVED BANNER ── */
+.saved-banner {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  display: none;
+}
+.saved-banner.show { display: flex; align-items: center; gap: 8px; }
+.saved-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 540px) {
+  .row2, .row3 { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .topbar-progress .prog-bar { width: 80px; }
+  .page { padding: 24px 16px 60px; }
+  .card, .action-body { padding: 18px 16px; }
+  .action-header { padding: 14px 16px; }
+  .submit-area { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">Салон <span>в цифрах</span></div>
+  <div class="topbar-progress">
+    <span id="prog-text">0%</span>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+    <span class="save-indicator" id="save-ind">Збережено</span>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-label">День 3 · Домашнє завдання</div>
+    <h1 class="hero-title">Мій план на <em>14 днів</em></h1>
+    <p class="hero-sub">Заповніть планер — і ваші дані автоматично збережуться. Після відправки план надійде Світлані і залишиться у вас.</p>
+  </div>
+
+  <!-- SAVED BANNER -->
+  <div class="saved-banner" id="saved-banner">
+    <div class="saved-dot"></div>
+    <span id="saved-text">Чернетка автоматично збережена</span>
+  </div>
+
+  <!-- 1. METRIC -->
+  <div class="section">
+    <div class="section-label">Крок 1 — Головна метрика</div>
+    <div class="card">
+      <div class="card-title">Одна цифра, яку відстежуєте ці 14 днів</div>
+      <div class="card-sub">Не 10 показників. Один — той, який найбільше впливає на ваш результат зараз.</div>
+      <div class="field">
+        <label class="field-label">Оберіть метрику</label>
+        <select id="metric" onchange="save()">
+          <option value="">— Оберіть —</option>
+          <option>Чистий прибуток (грн)</option>
+          <option>Відсоток повторних клієнтів (%)</option>
+          <option>No-show (кількість за тиждень)</option>
+          <option>Середній чек (грн)</option>
+          <option>Заповненість запису (%)</option>
+          <option>Валова маржа (%)</option>
+          <option>Інша метрика</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label class="field-label">Поточне значення</label>
+          <input type="text" id="metric-cur" placeholder="Наприклад: 35%" oninput="save()">
+        </div>
+        <div class="field">
+          <label class="field-label">Ціль через 14 днів</label>
+          <input type="text" id="metric-tgt" placeholder="Наприклад: 55%" oninput="save()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ACTIONS -->
+  <div class="section">
+    <div class="section-label">Крок 2 — Три дії</div>
+
+    <!-- Action 1 -->
+    <div class="action-card">
+      <div class="action-header">
+        <div class="action-badge badge-purple">1</div>
+        <div class="action-header-text">
+          <div class="action-type">Фінансова дія</div>
+          <div class="action-hint">Те, що дає ясність або покращує прибуток</div>
+        </div>
+      </div>
+      <div class="action-body">
+        <div class="field">
+          <label class="field-label">Опис дії</label>
+          <textarea id="a1-desc" placeholder="Наприклад: заповнити P&L за останні 2 місяці і порахувати маржу по ТОП-3 послугах..." oninput="save()"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Дата старту</label>
+            <input type="date" id="a1-start" onchange="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Дата контролю</label>
+            <input type="date" id="a1-check" onchange="save()">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Відповідальний</label>
+            <input type="text" id="a1-owner" placeholder="Я / Адміністратор / Ім'я" oninput="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Як зрозумію, що зроблено</label>
+            <input type="text" id="a1-result" placeholder="Є заповнена таблиця..." oninput="save()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action 2 -->
+    <div class="action-card">
+      <div class="action-header">
+        <div class="action-badge badge-teal">2</div>
+        <div class="action-header-text">
+          <div class="action-type">Запис і повторні клієнти</div>
+          <div class="action-hint">Те, що впливає на дохід прямо зараз</div>
+        </div>
+      </div>
+      <div class="action-body">
+        <div class="field">
+          <label class="field-label">Опис дії</label>
+          <textarea id="a2-desc" placeholder="Наприклад: налаштувати автоматичні нагадування за 24 години до запису..." oninput="save()"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Дата старту</label>
+            <input type="date" id="a2-start" onchange="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Дата контролю</label>
+            <input type="date" id="a2-check" onchange="save()">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Відповідальний</label>
+            <input type="text" id="a2-owner" placeholder="Я / Адміністратор / Ім'я" oninput="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Як зрозумію, що зроблено</label>
+            <input type="text" id="a2-result" placeholder="No-show зменшився на 30%..." oninput="save()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action 3 -->
+    <div class="action-card">
+      <div class="action-header">
+        <div class="action-badge badge-amber">3</div>
+        <div class="action-header-text">
+          <div class="action-type">Процеси і адмін</div>
+          <div class="action-hint">Те, що зменшує хаос і знімає навантаження з вас</div>
+        </div>
+      </div>
+      <div class="action-body">
+        <div class="field">
+          <label class="field-label">Опис дії</label>
+          <textarea id="a3-desc" placeholder="Наприклад: прописати ролі команди і провести зустріч з KPI..." oninput="save()"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Дата старту</label>
+            <input type="date" id="a3-start" onchange="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Дата контролю</label>
+            <input type="date" id="a3-check" onchange="save()">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">Відповідальний</label>
+            <input type="text" id="a3-owner" placeholder="Я / Адміністратор / Ім'я" oninput="save()">
+          </div>
+          <div class="field">
+            <label class="field-label">Як зрозумію, що зроблено</label>
+            <input type="text" id="a3-result" placeholder="Кожен майстер знає свої KPI..." oninput="save()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. KPI -->
+  <div class="section">
+    <div class="section-label">Крок 3 — Щотижневий контроль</div>
+    <div class="card">
+      <div class="card-title">Оберіть KPI, які відстежуватимете щотижня</div>
+      <div class="card-sub">Натисніть на картку щоб увімкнути, введіть свою ціль</div>
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="kpi-item" onclick="toggleKpi(this,'confirm')" data-key="confirm">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">Підтвердження запису</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: 100%" onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+        <div class="kpi-item" onclick="toggleKpi(this,'noshow')" data-key="noshow">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">No-show</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: менше 5%" onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+        <div class="kpi-item" onclick="toggleKpi(this,'repeat')" data-key="repeat">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">Повторні клієнти</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: 60%+" onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+        <div class="kpi-item" onclick="toggleKpi(this,'upsell')" data-key="upsell">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">Допродажі</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: ..." onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+        <div class="kpi-item" onclick="toggleKpi(this,'fill')" data-key="fill">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">Заповнення вікон</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: 80%+" onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+        <div class="kpi-item" onclick="toggleKpi(this,'avgcheck')" data-key="avgcheck">
+          <div class="kpi-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5l2.5 2.5 4.5-4" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="kpi-name">Середній чек</div>
+          <input class="kpi-target-input" type="text" placeholder="Ціль: ... грн" onclick="e=>e.stopPropagation()" oninput="save()">
+        </div>
+      </div>
+
+      <div style="margin-top:18px;border-top:1px solid var(--border);padding-top:16px">
+        <div class="field-label" style="margin-bottom:8px">Коли проводите щотижневий огляд (15–20 хв)</div>
+        <div class="row2">
+          <div class="field">
+            <label class="field-label">День тижня</label>
+            <select id="review-day" onchange="save()">
+              <option value="">— Оберіть день —</option>
+              <option>Понеділок</option><option>Вівторок</option><option>Середа</option>
+              <option>Четвер</option><option>П'ятниця</option><option>Субота</option><option>Неділя</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Час</label>
+            <input type="text" id="review-time" placeholder="Наприклад: 9:00" oninput="save()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. CONCLUSION -->
+  <div class="section">
+    <div class="section-label">Крок 4 — Висновок</div>
+    <div class="card">
+      <div class="card-title">Що ви зрозуміли за ці три дні</div>
+      <div class="card-sub">Одне речення — чого не розуміли раніше про свій бізнес</div>
+      <div class="field">
+        <textarea id="conclusion" placeholder="Наприклад: я не бачила реального прибутку — лише виручку. Тепер знаю де гроші і що змінити першим..." style="min-height:90px" oninput="save()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. SUBMIT -->
+  <div class="submit-area">
+    <div class="submit-title">Надіслати план Світлані</div>
+    <div class="submit-sub">Введіть ім'я і контакт — план збережеться у вас і надійде мені</div>
+    <div class="row2" style="margin-bottom:16px">
+      <div class="field">
+        <label class="field-label">Ваше ім'я або назва салону</label>
+        <input type="text" id="c-name" placeholder="Марина / Студія Bloom" oninput="save()">
+      </div>
+      <div class="field">
+        <label class="field-label">Telegram або email</label>
+        <input type="text" id="c-contact" placeholder="@username або email..." oninput="save()">
+      </div>
+    </div>
+    <button class="btn-main" id="btn-submit" onclick="submit()">Надіслати план</button>
+    <button class="btn-secondary" onclick="downloadPlan()">Зберегти собі як текст</button>
+    <div class="status-msg" id="status-msg"></div>
+  </div>
+
+</div>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcyVywvBLUXLw3ObtcuviEg6wnHkOjA3spfAvDef5wly4ta6XBG73mMIB7M4w0v1UzxQ/exec';
+const STORAGE_KEY = 'salon_planner_v1';
+
+const kpiActive = {};
+
+function toggleKpi(el, key) {
+  if (event.target.tagName === 'INPUT') return;
+  el.classList.toggle('active');
+  kpiActive[key] = el.classList.contains('active');
+  save();
+}
+
+function gv(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+function sv(id, val) {
+  const el = document.getElementById(id);
+  if (el && val !== undefined) el.value = val;
+}
+
+let saveTimer = null;
+function save() {
+  updateProgress();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const data = collectData();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const ind = document.getElementById('save-ind');
+      ind.classList.add('show');
+      setTimeout(() => ind.classList.remove('show'), 1800);
+      const banner = document.getElementById('saved-banner');
+      const ts = new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('saved-text').textContent = 'Чернетка збережена о ' + ts;
+      banner.classList.add('show');
+    } catch(e) {}
+  }, 600);
+}
+
+function collectData() {
+  const activeKpis = Array.from(document.querySelectorAll('.kpi-item.active')).map(el => {
+    const name = el.querySelector('.kpi-name').textContent;
+    const target = el.querySelector('.kpi-target-input').value;
+    return target ? name + ': ' + target : name;
+  });
+  return {
+    type: 'planner',
+    name:    gv('c-name'),
+    contact: gv('c-contact'),
+    metric:        gv('metric'),
+    metricCurrent: gv('metric-cur'),
+    metricTarget:  gv('metric-tgt'),
+    a1: { desc: gv('a1-desc'), start: gv('a1-start'), check: gv('a1-check'), owner: gv('a1-owner'), result: gv('a1-result') },
+    a2: { desc: gv('a2-desc'), start: gv('a2-start'), check: gv('a2-check'), owner: gv('a2-owner'), result: gv('a2-result') },
+    a3: { desc: gv('a3-desc'), start: gv('a3-start'), check: gv('a3-check'), owner: gv('a3-owner'), result: gv('a3-result') },
+    kpi: activeKpis,
+    reviewDay:  gv('review-day'),
+    reviewTime: gv('review-time'),
+    conclusion: gv('conclusion'),
+  };
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    sv('c-name', d.name); sv('c-contact', d.contact);
+    sv('metric', d.metric); sv('metric-cur', d.metricCurrent); sv('metric-tgt', d.metricTarget);
+    if (d.a1) { sv('a1-desc',d.a1.desc);sv('a1-start',d.a1.start);sv('a1-check',d.a1.check);sv('a1-owner',d.a1.owner);sv('a1-result',d.a1.result); }
+    if (d.a2) { sv('a2-desc',d.a2.desc);sv('a2-start',d.a2.start);sv('a2-check',d.a2.check);sv('a2-owner',d.a2.owner);sv('a2-result',d.a2.result); }
+    if (d.a3) { sv('a3-desc',d.a3.desc);sv('a3-start',d.a3.start);sv('a3-check',d.a3.check);sv('a3-owner',d.a3.owner);sv('a3-result',d.a3.result); }
+    sv('review-day', d.reviewDay); sv('review-time', d.reviewTime);
+    sv('conclusion', d.conclusion);
+    if (d.kpi && Array.isArray(d.kpi)) {
+      const kpiNames = { confirm:'Підтвердження запису', noshow:'No-show', repeat:'Повторні клієнти', upsell:'Допродажі', fill:'Заповнення вікон', avgcheck:'Середній чек' };
+      d.kpi.forEach(kpiStr => {
+        const name = kpiStr.split(':')[0].trim();
+        const target = kpiStr.includes(':') ? kpiStr.split(':').slice(1).join(':').trim() : '';
+        document.querySelectorAll('.kpi-item').forEach(el => {
+          if (el.querySelector('.kpi-name').textContent === name) {
+            el.classList.add('active');
+            if (target) el.querySelector('.kpi-target-input').value = target;
+          }
+        });
+      });
+    }
+    const banner = document.getElementById('saved-banner');
+    banner.classList.add('show');
+    document.getElementById('saved-text').textContent = 'Завантажено збережену чернетку';
+    updateProgress();
+  } catch(e) {}
+}
+
+function updateProgress() {
+  const fields = [
+    gv('metric'), gv('metric-cur'), gv('metric-tgt'),
+    gv('a1-desc'), gv('a1-start'), gv('a1-owner'), gv('a1-result'),
+    gv('a2-desc'), gv('a2-start'), gv('a2-owner'), gv('a2-result'),
+    gv('a3-desc'), gv('a3-start'), gv('a3-owner'), gv('a3-result'),
+    gv('review-day'), gv('conclusion'),
+  ];
+  const filled = fields.filter(f => f).length;
+  const pct = Math.round((filled / fields.length) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = pct + '%';
+}
+
+async function submit() {
+  const name = gv('c-name');
+  if (!name) { alert("Будь ласка, введіть ваше ім'я або назву салону."); return; }
+  const btn = document.getElementById('btn-submit');
+  const msgEl = document.getElementById('status-msg');
+  btn.disabled = true;
+  btn.textContent = 'Надсилаємо...';
+  msgEl.className = 'status-msg';
+  msgEl.style.display = 'none';
+  const data = collectData();
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    msgEl.textContent = 'Ваш план надіслано! Дякуємо. Світлана вже отримала ваші відповіді.';
+    msgEl.className = 'status-msg status-ok';
+    msgEl.style.display = 'block';
+    btn.textContent = 'Надіслано';
+  } catch(err) {
+    msgEl.textContent = 'Помилка при відправці. Збережіть план кнопкою нижче.';
+    msgEl.className = 'status-msg status-err';
+    msgEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Надіслати план';
+  }
+}
+
+function fmtDate(val) {
+  if (!val) return '—';
+  try { return new Date(val).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long' }); } catch(e) { return val; }
+}
+
+function downloadPlan() {
+  const d = collectData();
+  const lines = [
+    '=== МІЙ ПЛАН НА 14 ДНІВ ===',
+    'Дата: ' + new Date().toLocaleDateString('uk-UA'),
+    "Ім'я / Салон: " + (d.name || '—'),
+    'Контакт: ' + (d.contact || '—'),
+    '',
+    '─── ГОЛОВНА МЕТРИКА ───',
+    d.metric || '—',
+    'Зараз: ' + (d.metricCurrent || '—') + '   Ціль: ' + (d.metricTarget || '—'),
+    '',
+    '─── ДІЯ 1 — Фінанси ───',
+    d.a1.desc || '—',
+    'Старт: ' + fmtDate(d.a1.start) + '   Контроль: ' + fmtDate(d.a1.check),
+    'Відповідальний: ' + (d.a1.owner || '—'),
+    'Результат: ' + (d.a1.result || '—'),
+    '',
+    '─── ДІЯ 2 — Запис ───',
+    d.a2.desc || '—',
+    'Старт: ' + fmtDate(d.a2.start) + '   Контроль: ' + fmtDate(d.a2.check),
+    'Відповідальний: ' + (d.a2.owner || '—'),
+    'Результат: ' + (d.a2.result || '—'),
+    '',
+    '─── ДІЯ 3 — Адмін ───',
+    d.a3.desc || '—',
+    'Старт: ' + fmtDate(d.a3.start) + '   Контроль: ' + fmtDate(d.a3.check),
+    'Відповідальний: ' + (d.a3.owner || '—'),
+    'Результат: ' + (d.a3.result || '—'),
+    '',
+    '─── KPI ЩОТИЖНЯ ───',
+    d.kpi.length ? d.kpi.join('\n') : '—',
+    'Огляд: ' + (d.reviewDay || '—') + ' о ' + (d.reviewTime || '—'),
+    '',
+    '─── МІЙ ВИСНОВОК ───',
+    d.conclusion || '—',
+  ];
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'plan_14_days.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+loadSaved();
+</script>
+</body>
+</html>
